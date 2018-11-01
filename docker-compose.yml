@@ -1,0 +1,29 @@
+version: '3.5'
+services:
+  master:
+    image: ukc9rtxegfhk9v/spark-docker
+    command: bin/spark-class org.apache.spark.deploy.master.Master -h master
+    hostname: master
+    environment:
+      MASTER: spark://master:7077
+      SPARK_CONF_DIR: /conf
+      SPARK_PUBLIC_DNS: ${EXTERNAL_IP}
+    ports:
+      - 4040:4040
+      - 6066:6066
+      - 7077:7077
+      - 8080:8080
+  worker:
+    image: ukc9rtxegfhk9v/spark-docker
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
+    hostname: worker
+    environment:
+      SPARK_CONF_DIR: /conf
+      SPARK_WORKER_CORES: 1
+      SPARK_WORKER_MEMORY: 500M
+      SPARK_EXECUTOR_MEMORY: 200M
+      SPARK_PUBLIC_DNS: ${EXTERNAL_IP}
+    depends_on:
+      - master
+    ports:
+      - 8081:8081
