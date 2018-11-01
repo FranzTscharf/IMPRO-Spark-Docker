@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   master:
-    image: ukc9rtxegfhk9v/spark-docker
+    image: ukc9rtxegfhk9v/impro-spark-docker
     command: bin/spark-class org.apache.spark.deploy.master.Master -h master
     hostname: master
     environment:
@@ -14,7 +14,7 @@ services:
       - 7077:7077
       - 8080:8080
   worker:
-    image: ukc9rtxegfhk9v/spark-docker
+    image: ukc9rtxegfhk9v/impro-spark-docker
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
     hostname: worker
     environment:
