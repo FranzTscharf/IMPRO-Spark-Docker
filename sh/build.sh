@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Create the VMS..."
 for i in 1 2; do
-	docker-machine create --driver virtualbox node-$i;
+	docker-machine create --driver virtualbox --engine-opt experimental --engine-opt metrics-addr=0.0.0.0:4999 node-$i;
 done
 
 echo "Initializing Swarm mode..."
@@ -21,3 +21,6 @@ docker service scale spark_worker=1
 echo "Get address..."
 NODE=$(docker service ps --format "{{.Node}}" spark_master)
 docker-machine ip $NODE
+echo "Get address..."
+echo "curl http://$(docker-machine ip node-1):4999/metrics"
+echo "curl http://$(docker-machine ip node-2):4999/metrics"
