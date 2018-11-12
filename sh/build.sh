@@ -18,7 +18,7 @@ export EXTERNAL_IP=$(docker-machine ip node-2)
 docker stack deploy --compose-file=docker-compose.yml spark
 docker service scale spark_worker=1
 
-echo "Get address..."
+echo "Get metrics..."
 NODE=$(docker service ps --format "{{.Node}}" spark_master)
 docker-machine ip $NODE
 echo "Get address..."
