@@ -15,7 +15,8 @@ docker-machine ssh node-2 "docker swarm join --token ${TOKEN} $(docker-machine i
 echo "Deploying Spark..."
 eval $(docker-machine env node-1)
 export EXTERNAL_IP=$(docker-machine ip node-2)
-docker stack deploy --compose-file=docker-compose.yml spark
+basename="$(dirname $(dirname $0))"
+docker stack deploy --compose-file="$basename"/docker-compose.yml spark
 docker service scale spark_worker=1
 
 echo "Get address..."

@@ -1,4 +1,7 @@
 FROM debian:jessie
+#Node exporter for spark metrics
+RUN curl -LO "https://github.com/prometheus/node_exporter/releases/download/v0.17.0-rc.0/node_exporter-0.17.0-rc.0.linux-amd64.tar.gz"
+
 
 RUN apt-get update \
   && apt-get install -y curl unzip \
@@ -12,7 +15,7 @@ ENV PYTHONHASHSEED 0
 ENV PYTHONIOENCODING UTF-8
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 
-#Java
+#Java JDK
 ARG JAVA_MAJOR_VERSION=8
 ARG JAVA_UPDATE_VERSION=131
 ARG JAVA_BUILD_NUMBER=11
@@ -27,7 +30,7 @@ RUN curl -sL --retry 3 --insecure \
   && ln -s $JAVA_HOME /usr/java \
   && rm -rf $JAVA_HOME/man
 
-#Hadoop
+#Hadoop DB
 ENV HADOOP_VERSION 2.8.3
 ENV HADOOP_HOME /usr/hadoop-$HADOOP_VERSION
 ENV HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
@@ -51,5 +54,9 @@ RUN curl -sL --retry 3 \
   | tar x -C /usr/ \
  && mv /usr/$SPARK_PACKAGE $SPARK_HOME \
  && chown -R root:root $SPARK_HOME
+
+#Node exporter
+RUN curl -sL --retry 3 \
+	"https://github.com/prometheus/node_exporter/releases/download/v0.17.0-rc.0/node_exporter-0.17.0-rc.0.linux-amd64.tar.gz
 
 WORKDIR $SPARK_HOME
