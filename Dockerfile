@@ -1,8 +1,4 @@
 FROM debian:jessie
-#Node exporter for spark metrics
-RUN curl -LO "https://github.com/prometheus/node_exporter/releases/download/v0.17.0-rc.0/node_exporter-0.17.0-rc.0.linux-amd64.tar.gz"
-
-
 RUN apt-get update \
   && apt-get install -y curl unzip \
     python3 python3-setuptools \
@@ -54,9 +50,7 @@ RUN curl -sL --retry 3 \
   | tar x -C /usr/ \
  && mv /usr/$SPARK_PACKAGE $SPARK_HOME \
  && chown -R root:root $SPARK_HOME
-
-#Node exporter
-RUN curl -sL --retry 3 \
-	"https://github.com/prometheus/node_exporter/releases/download/v0.17.0-rc.0/node_exporter-0.17.0-rc.0.linux-amd64.tar.gz
+#Configure Spark
+ADD ./packages/metrics.properties /usr/spark-2.3.1/conf/metrics.properties
 
 WORKDIR $SPARK_HOME
