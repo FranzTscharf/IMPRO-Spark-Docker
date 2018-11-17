@@ -1,4 +1,5 @@
 FROM debian:jessie
+
 RUN apt-get update \
   && apt-get install -y curl unzip \
     python3 python3-setuptools \
@@ -11,7 +12,7 @@ ENV PYTHONHASHSEED 0
 ENV PYTHONIOENCODING UTF-8
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 
-#Java JDK
+#Java
 ARG JAVA_MAJOR_VERSION=8
 ARG JAVA_UPDATE_VERSION=131
 ARG JAVA_BUILD_NUMBER=11
@@ -26,7 +27,7 @@ RUN curl -sL --retry 3 --insecure \
   && ln -s $JAVA_HOME /usr/java \
   && rm -rf $JAVA_HOME/man
 
-#Hadoop DB
+#Hadoop
 ENV HADOOP_VERSION 2.8.3
 ENV HADOOP_HOME /usr/hadoop-$HADOOP_VERSION
 ENV HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
@@ -50,7 +51,5 @@ RUN curl -sL --retry 3 \
   | tar x -C /usr/ \
  && mv /usr/$SPARK_PACKAGE $SPARK_HOME \
  && chown -R root:root $SPARK_HOME
-#Configure Spark metrics -> grafana
-ADD ./pkg/metrics.properties /usr/spark-2.3.1/conf/metrics.properties
 
 WORKDIR $SPARK_HOME
