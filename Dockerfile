@@ -51,5 +51,9 @@ RUN curl -sL --retry 3 \
   | tar x -C /usr/ \
  && mv /usr/$SPARK_PACKAGE $SPARK_HOME \
  && chown -R root:root $SPARK_HOME
+ 
+#Configure Spark metrics -> grafana
+ADD ./pkg/metrics.properties /usr/spark-2.3.1/conf/metrics.properties
+
 
 WORKDIR $SPARK_HOME
