@@ -1,0 +1,1 @@
+SPARK_DAEMON_JAVA_OPTS='-Dspark.metrics.conf=/usr/spark-2.3.1/conf/metrics.properties'
