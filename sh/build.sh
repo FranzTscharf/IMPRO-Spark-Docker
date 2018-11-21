@@ -49,6 +49,7 @@ echo "Navigate to the Spark master..."
 docker exec -it $CONTAINER_ID bash -c "echo "*.sink.graphite.host=$(docker-machine ip node-v)" >> /usr/spark-2.3.1/conf/metrics.properties"
 
 echo "Get metrics..."
+eval $(docker-machine env node-1)
 NODE=$(docker service ps --format "{{.Node}}" spark_master)
 docker-machine ip $NODE
 echo "Get address of spark master..."
