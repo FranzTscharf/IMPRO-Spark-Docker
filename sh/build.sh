@@ -8,7 +8,7 @@ for i in 1 2 3; do
   docker-machine create \
     --driver digitalocean \
     --digitalocean-region "nyc1" \
-    --digitalocean-size "3gb" \
+    --digitalocean-size "4gb" \
     --digitalocean-access-token $apikey \
     node-$i;
 done

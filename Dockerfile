@@ -55,6 +55,6 @@ RUN curl -sL --retry 3 \
 #Configure Spark metrics -> grafana
 ADD ./pkg/metrics.properties /usr/spark-2.3.1/conf/metrics.properties
 ADD ./pkg/spark-env.sh /usr/spark-2.3.1/conf/spark-env.sh
-RUN chmod a+x /usr/spark-2.3.1/conf/spark-env.sh
+RUN chmod +x /usr/spark-2.3.1/conf/spark-env.sh
 
 WORKDIR $SPARK_HOME
