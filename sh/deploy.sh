@@ -16,6 +16,8 @@ docker cp "$basename"/app/letter-count.py $CONTAINER_ID:/tmp
 echo "Running Spark Job..."
 docker exec $CONTAINER_ID \
   bin/spark-submit \
+    --files=/usr/spark-2.3.1/conf/metrics.properties \
+    --conf spark.metrics.conf=/usr/spark-2.3.1/conf/metrics.properties \
     --master spark://master:7077 \
     --class endpoint \
     /tmp/letter-count.py
