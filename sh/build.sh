@@ -2,13 +2,13 @@
 echo "Please enter the Apikey of DigitalOcean:"
 read apikey
 echo "Destroy priviose VM's"
-docker-machine rm node-1 node-2 node-3 -y
+docker-machine rm node-1 node-2 node-3 -y --force
 echo "Create the VMS..."
 for i in 1 2 3; do
   docker-machine create \
     --driver digitalocean \
     --digitalocean-region "nyc1" \
-    --digitalocean-size "1gb" \
+    --digitalocean-size "3gb" \
     --digitalocean-access-token $apikey \
     node-$i;
 done
