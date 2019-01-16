@@ -46,15 +46,26 @@ ENV SPARK_HOME /usr/spark-${SPARK_VERSION}
 ENV SPARK_DIST_CLASSPATH="$HADOOP_HOME/etc/hadoop/*:$HADOOP_HOME/share/hadoop/common/lib/*:$HADOOP_HOME/share/hadoop/common/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/hdfs/lib/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/yarn/lib/*:$HADOOP_HOME/share/hadoop/yarn/*:$HADOOP_HOME/share/hadoop/mapreduce/lib/*:$HADOOP_HOME/share/hadoop/mapreduce/*:$HADOOP_HOME/share/hadoop/tools/lib/*"
 ENV PATH $PATH:${SPARK_HOME}/bin
 RUN curl -sL --retry 3 \
-  "https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=spark/spark-${SPARK_VERSION}/${SPARK_PACKAGE}.tgz" \
+  "http://mirror.23media.de/apache/spark/spark-${SPARK_VERSION}/${SPARK_PACKAGE}.tgz" \
   | gunzip \
   | tar x -C /usr/ \
  && mv /usr/$SPARK_PACKAGE $SPARK_HOME \
  && chown -R root:root $SPARK_HOME
 
+#CollectD Install & Configuration
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get -y update
+RUN apt-get -y install collectd curl python-pip
+ADD ./pkg/collectd/etc_mtab /etc/mtab
+ADD ./pkg/collectd/collectd.conf.tpl /etc/collectd/collectd.conf.tpl
+RUN pip install envtpl
+ADD ./pkg/collectd/start_container /usr/bin/start_container
+RUN chmod +x /usr/bin/start_container
+
 #Configure Spark metrics -> grafana
-ADD ./pkg/metrics.properties /usr/spark-2.3.1/conf/metrics.properties
-ADD ./pkg/spark-env.sh /usr/spark-2.3.1/conf/spark-env.sh
+ADD ./pkg/spark/metrics.properties /usr/spark-2.3.1/conf/metrics.properties
+ADD ./pkg/spark/spark-env.sh /usr/spark-2.3.1/conf/spark-env.sh
 RUN chmod +x /usr/spark-2.3.1/conf/spark-env.sh
 
 WORKDIR $SPARK_HOME
+CMD     start_container
