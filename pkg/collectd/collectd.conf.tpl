@@ -1,4 +1,4 @@
-Hostname "XYZ"
+Hostname "{{ HOST_NAME }}"
 
 FQDNLookup false
 Interval 1
@@ -64,7 +64,7 @@ LoadPlugin write_graphite
 
 <Plugin "write_graphite">
  <Carbon>
-   Host "XYZ"
+   Host "{{ GRAPHITE_HOST }}"
    Port "2003"
    Prefix "collectd."
    EscapeCharacter "_"
