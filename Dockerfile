@@ -61,6 +61,7 @@ ADD ./pkg/collectd/collectd.conf.tpl /etc/collectd/collectd.conf.tpl
 RUN pip install envtpl
 ADD ./pkg/collectd/run_collectD /usr/bin/run_collectD
 RUN chmod +x /usr/bin/run_collectD
+#CMD     run_collectD
 
 #Configure Spark metrics -> grafana
 ADD ./pkg/spark/metrics.properties /usr/spark-2.3.1/conf/metrics.properties
@@ -68,4 +69,3 @@ ADD ./pkg/spark/spark-env.sh /usr/spark-2.3.1/conf/spark-env.sh
 RUN chmod +x /usr/spark-2.3.1/conf/spark-env.sh
 
 WORKDIR $SPARK_HOME
-#CMD     run_collectD
