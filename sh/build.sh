@@ -110,11 +110,24 @@ basename="$(dirname $(dirname $0))"
 docker stack deploy --compose-file="$basename"/docker-compose.yml spark
 docker service scale spark_worker=2
 
-echo -e "\033[1mAdd the host ip of the visualisation node to the config file of all nodes\033[0m"
+echo -e "\033[1mAdd the host ip of the visualisation node to the graphite config file of all nodes\033[0m"
 for i in 1 2 3; do
     eval $(docker-machine env node-$i)
     for container in $(docker ps --format "{{.ID}}");do
         docker exec -it $container bash -c "echo "*.sink.graphite.host=$(docker-machine ip node-v)" >> /usr/spark-2.3.1/conf/metrics.properties"
+    done
+done
+
+echo -e "\033[1mAdd the host ip of the visualisation node to the collectD config file of all nodes\033[0m"
+for i in 1 2 3; do
+    eval $(docker-machine env node-$i)
+    export EXTERNAL_VIS_IP=$(docker-machine ip node-v)
+    for container in $(docker ps --format "{{.ID}}");do
+        first=$(echo $(docker inspect ${container} --format='{{.Name}}') | tr -d '/')
+        secend=$(echo $(docker inspect ${container} --format='{{index .Config.Labels "com.docker.swarm.task.id"}}'))
+        export HOST_NAME=$(echo "${first/$secend/}")
+        docker exec -it $container bash -c "sed -i -e 's/{{ GRAPHITE_HOST }}/${EXTERNAL_VIS_IP}/g;s/{{ HOST_NAME }}/${HOST_NAME}/g' /etc/collectd/collectd.conf.tpl"
+        docker exec -it $container bash -c "run_collectD &"
     done
 done
 
