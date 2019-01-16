@@ -8,6 +8,8 @@ services:
       MASTER: spark://master:7077
       SPARK_CONF_DIR: /conf
       SPARK_PUBLIC_DNS: ${EXTERNAL_IP}
+      GRAPHITE_HOST: ${EXTERNAL_VIS_IP}
+      GRAPHITE_PORT: 2003
     ports:
       - 4040:4040
       - 6066:6066
@@ -21,7 +23,9 @@ services:
       SPARK_CONF_DIR: /conf
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 4000M
-      SPARK_PUBLIC_DNS: ${EXTERNAL_IP}
+      SPARK_PUBLIC_DNS: ${EXTERNAL_VIS_IP}
+      GRAPHITE_HOST: ${EXTERNAL_IP}
+      GRAPHITE_PORT: 2003
     depends_on:
       - master
     ports:
