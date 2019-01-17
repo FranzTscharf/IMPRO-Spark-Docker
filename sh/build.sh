@@ -118,7 +118,7 @@ for i in 1 2 3; do
     done
 done
 
-echo -e "\033[1mAdd the host ip of the visualisation node to the collectD config file of all nodes\033[0m"
+echo -e "\033[1mAdd the host ip of the visualisation node to the collectD config file of all nodes and start collectD\033[0m"
 for i in 1 2 3; do
     eval $(docker-machine env node-$i)
     export EXTERNAL_VIS_IP=$(docker-machine ip node-v)
@@ -127,7 +127,7 @@ for i in 1 2 3; do
         secend=$(echo $(docker inspect ${container} --format='{{index .Config.Labels "com.docker.swarm.task.id"}}'))
         export HOST_NAME=$(echo "${first/$secend/}")
         docker exec -it $container bash -c "sed -i -e 's/{{ GRAPHITE_HOST }}/${EXTERNAL_VIS_IP}/g;s/{{ HOST_NAME }}/${HOST_NAME}/g' /etc/collectd/collectd.conf.tpl"
-        docker exec -it $container bash -c "run_collectD &"
+        docker exec -it $container bash -c run_collectD &
     done
 done
 
