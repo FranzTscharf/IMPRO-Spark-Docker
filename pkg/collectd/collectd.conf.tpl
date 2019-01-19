@@ -14,6 +14,8 @@ LoadPlugin interface
 LoadPlugin uptime
 LoadPlugin swap
 LoadPlugin write_graphite
+LoadPlugin users
+LoadPlugin entropy
 
 <Plugin cpu>
   ReportByCpu false
@@ -49,7 +51,8 @@ LoadPlugin write_graphite
 </Plugin>
 
 <Plugin "disk">
-  Disk "/^[hs]d[a-z]/"
+  Disk "sda"
+  Disk "/^hd/"
   IgnoreSelected false
 </Plugin>
 
