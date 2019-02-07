@@ -22,7 +22,7 @@ case "$issa" in
                 --digitalocean-size "4gb" \
                 --digitalocean-access-token $apikey \
                 node-v;
-            docker-machine ssh node-v "docker run -d -p 80:80 -p 81:81 -p 8000:8000 -p 2003:2003 -p 8125:8125/udp -p 8126:8126 --name graphite-grafana kamon/grafana_graphite"
+            docker-machine ssh node-v "docker run -v `pwd`/data/whisper:/opt/graphite/storage/whisper -v `pwd`/data/grafana:/opt/grafana/data -v `pwd`/log/graphite:/opt/graphite/storage/log -v `pwd`/log/supervisor:/var/log/supervisor -d -p 80:80 -p 81:81 -p 8000:8000 -p 2003:2003 -p 8125:8125/udp -p 8126:8126 --name graphite-grafana ukc9rtxegfhk9v/impro-spark-docker-graphite-grafana"
 
             echo -e "\033[1mCreate the Apache Spark Cluster VMS...\033[0m"
             for i in 1 2 3; do
