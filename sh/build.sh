@@ -13,7 +13,7 @@ case "$issa" in
             echo -e "\033[1mPlease enter the Apikey of DigitalOcean:\033[0m"
             read apikey
             echo -e "\033[1mDestroy priviose VM's\033[0m"
-            docker-machine rm node-1 node-2 node-3 node-v -y --force
+            docker-machine rm node-1 node-2 node-3 node-v node-s -y --force
 
             echo -e "\033[1mCreate the Visualisation VM...\033[0m"
             docker-machine create \
@@ -22,8 +22,13 @@ case "$issa" in
                 --digitalocean-size "4gb" \
                 --digitalocean-access-token $apikey \
                 node-v;
-            docker-machine ssh node-v "git clone https://github.com/FranzTscharf/IMPRO-Spark-Docker-Graphite-Grafana.git ."
-            docker-machine ssh node-v "apt install make -y && make up"
+            docker-machine ssh node-v "apt install docker-compose make -y"
+            docker-machine ssh node-v "git clone https://github.com/FranzTscharf/IMPRO-Spark-Docker-Graphite-Grafana.git"
+            eval $(docker-machine env node-v)
+            export NODE_V_PUBLIC_IP=$(docker-machine ip node-v)
+            docker-machine ssh node-v "sed -i -e 's/localhost/${NODE_V_PUBLIC_IP}/g' ./IMPRO-Spark-Docker-Graphite-Grafana/grafana/datasources/datasource.yml"
+            docker-machine ssh node-v "cd IMPRO-Spark-Docker-Graphite-Grafana && docker-compose up -d"
+            eval $(docker-machine env -u)
             
             echo -e "\033[1mCreate the Apache Spark Cluster VMS...\033[0m"
             for i in 1 2 3; do
