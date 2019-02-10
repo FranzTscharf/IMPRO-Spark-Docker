@@ -18,9 +18,7 @@ LoadPlugin users
 LoadPlugin entropy
 
 <Plugin cpu>
-  ReportByState = true
-  ReportByCpu = true
-  ValuesPercentage = true
+  ReportByCpu false
 </Plugin>
 
 <Plugin df>
