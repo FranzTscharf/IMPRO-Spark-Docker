@@ -10,20 +10,23 @@ For collecting the statistics it uses CollecD.
 # Getting Started
 ## Deploy Enviroment:
 
-```cd IMPRO-Spark-Docker
-	sh ./sh/build.sh
+```
+cd IMPRO-Spark-Docker
+sh ./sh/build.sh
 ```
 follow instructions of the script.
 At the end you can look into your IaaS provider ther should be multible vms deployed.
 
 ## Deploy Apache Spark Example Streaming Application:
-```cd IMPRO-Spark-Docker
-	sh ./sh/deploy-app-streaming.sh
+```
+cd IMPRO-Spark-Docker
+sh ./sh/deploy-app-streaming.sh
 ```
 Wait until the app is ready.
 afterwards you can lauch the source thought the following commands.
-```cd IMPRO-Spark-Docker
-	sh ./sh/deploy-app-source.sh
+```
+cd IMPRO-Spark-Docker
+sh ./sh/deploy-app-source.sh
 ```
 ## Access Web UI:
 -Grafana on ip of node-v and port 80
